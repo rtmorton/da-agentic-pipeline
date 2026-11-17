@@ -19,8 +19,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load settings (API key, bucket name) from the .env file in the project root.
-load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+# Load settings (project, bucket, model access) from the .env file in the
+# project root. override=True makes the .env values win over variables the
+# environment already sets, such as the default project in Cloud Shell.
+load_dotenv(Path(__file__).resolve().parent.parent / ".env", override=True)
 
 from google.adk.agents import LlmAgent  # noqa: E402
 from google.adk.agents import SequentialAgent  # noqa: E402
@@ -30,7 +32,7 @@ from .tools import fetch_weather_data  # noqa: E402
 from .tools import transform_weather_data  # noqa: E402
 from .tools import upload_to_gcs  # noqa: E402
 
-MODEL = os.getenv("PIPELINE_MODEL", "gemini-2.5-flash")
+MODEL = os.getenv("PIPELINE_MODEL", "gemini-3.5-flash")
 
 _RULES = (
     "Call your tool exactly once. Do not invent numbers: only report values "
