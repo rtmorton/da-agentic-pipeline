@@ -54,8 +54,13 @@ weather_pipeline (ADK SequentialAgent)
 ## Prerequisites
 
 1. **Python 3.10 or newer.**
-2. **A Gemini API key** (free) from <https://aistudio.google.com/apikey>.
-3. **A Google Cloud project** with a Cloud Storage bucket you can write to.
+2. **A Google Cloud project** with billing enabled and a Cloud Storage bucket
+   you can write to.
+3. **Access to Gemini**, using one of:
+   - *Vertex AI (default):* enable the API once with
+     `gcloud services enable aiplatform.googleapis.com`. Usage is billed to
+     the project.
+   - *A Gemini API key* from <https://aistudio.google.com/apikey>.
 4. **Google Cloud credentials** for that project:
    - In **Google Cloud Shell**, this is already done for you.
    - On your own computer, install the
@@ -79,7 +84,7 @@ pip install -r requirements.txt
 
 # 3. Create your settings file and fill in your own values
 cp env.example .env
-nano .env        # set GOOGLE_API_KEY, GOOGLE_CLOUD_PROJECT, and GCS_BUCKET
+nano .env        # set GOOGLE_CLOUD_PROJECT and GCS_BUCKET (and GOOGLE_API_KEY if using a key)
 
 # 4. Run the pipeline
 python main.py
@@ -103,10 +108,11 @@ You can also explore the agents interactively with ADK's web UI by running
 
 | Setting | Required | Description |
 |---|---|---|
-| `GOOGLE_API_KEY` | Yes | Gemini API key used by the agents |
-| `GOOGLE_GENAI_USE_VERTEXAI` | Yes | Keep as `FALSE` to use the Gemini API key |
+| `GOOGLE_CLOUD_PROJECT` | Yes | Google Cloud project ID that owns the bucket |
 | `GCS_BUCKET` | Yes | Name of the Cloud Storage bucket to write to |
-| `GOOGLE_CLOUD_PROJECT` | Recommended | Google Cloud project ID that owns the bucket |
+| `GOOGLE_GENAI_USE_VERTEXAI` | Yes | `TRUE` to use Gemini through Vertex AI, `FALSE` to use an API key |
+| `GOOGLE_CLOUD_LOCATION` | With Vertex AI | Vertex AI region, for example `us-central1` |
+| `GOOGLE_API_KEY` | With an API key | Gemini API key from Google AI Studio |
 | `PIPELINE_MODEL` | No | Gemini model for the agents (default `gemini-2.5-flash`) |
 
 To analyze different cities, edit the `CITIES` dictionary at the top of
@@ -114,7 +120,7 @@ To analyze different cities, edit the `CITIES` dictionary at the top of
 
 ## Security
 
-No credentials are stored in this repository. The API key and bucket name are
-read from a local `.env` file, which is excluded by `.gitignore`. Cloud Storage
+No credentials are stored in this repository. Settings such as the bucket name
+and any API key are read from a local `.env` file, which is excluded by `.gitignore`. Cloud Storage
 access uses Google's Application Default Credentials. The bucket stays private:
 the report link only opens for accounts with access to the project.

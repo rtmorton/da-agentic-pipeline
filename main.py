@@ -15,11 +15,20 @@ from pipeline_agent.agent import root_agent
 
 APP_NAME = "weather_pipeline"
 USER_ID = "student"
-REQUIRED_SETTINGS = ("GOOGLE_API_KEY", "GCS_BUCKET")
+
+
+def uses_vertex_ai() -> bool:
+  return os.getenv("GOOGLE_GENAI_USE_VERTEXAI", "").strip().lower() in ("true", "1")
 
 
 def check_settings() -> None:
-  missing = [name for name in REQUIRED_SETTINGS if not os.getenv(name)]
+  if uses_vertex_ai():
+    # Gemini through Vertex AI: billed to the Google Cloud project.
+    required = ("GOOGLE_CLOUD_PROJECT", "GOOGLE_CLOUD_LOCATION", "GCS_BUCKET")
+  else:
+    # Gemini API key from Google AI Studio.
+    required = ("GOOGLE_API_KEY", "GCS_BUCKET")
+  missing = [name for name in required if not os.getenv(name)]
   if missing:
     print(
         "Missing settings: " + ", ".join(missing) + "\n"
