@@ -111,9 +111,9 @@ You can also explore the agents interactively with ADK's web UI by running
 | `GOOGLE_CLOUD_PROJECT` | Yes | Google Cloud project ID that owns the bucket |
 | `GCS_BUCKET` | Yes | Name of the Cloud Storage bucket to write to |
 | `GOOGLE_GENAI_USE_VERTEXAI` | Yes | `TRUE` to use Gemini through Vertex AI, `FALSE` to use an API key |
-| `GOOGLE_CLOUD_LOCATION` | With Vertex AI | Vertex AI region, for example `us-central1` |
+| `GOOGLE_CLOUD_LOCATION` | With Vertex AI | Vertex AI location. Use `global` (current Gemini models are served there) |
 | `GOOGLE_API_KEY` | With an API key | Gemini API key from Google AI Studio |
-| `PIPELINE_MODEL` | No | Gemini model for the agents (default `gemini-2.5-flash`) |
+| `PIPELINE_MODEL` | No | Gemini model for the agents (default `gemini-3.5-flash`) |
 
 To analyze different cities, edit the `CITIES` dictionary at the top of
 `pipeline_agent/tools.py`.
